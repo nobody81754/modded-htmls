@@ -888,6 +888,307 @@ function showNotification(message,type='info') {
     },5000);
 
 }
+// MODE SWITCHING
+function switchToMode(mode) {
+
+    currentMode = mode;
+
+    const launcherTab = app.querySelector('#launcherTab');
+    const stegoTab = app.querySelector('#stegoTab');
+    const aboutTab = app.querySelector('#aboutTab');
+
+    const launcherContent = app.querySelector('#launcherContent');
+    const stegoContent = app.querySelector('#stegoContent');
+    const aboutContent = app.querySelector('#aboutContent');
+
+    // reset tabs
+    launcherTab.classList.remove('active');
+    stegoTab.classList.remove('active');
+    aboutTab.classList.remove('active');
+
+    launcherContent.classList.remove('active');
+    stegoContent.classList.remove('active');
+    aboutContent.classList.remove('active');
+
+    if (mode === 'launcher') {
+        launcherTab.classList.add('active');
+        launcherContent.classList.add('active');
+    }
+
+    if (mode === 'stego') {
+        stegoTab.classList.add('active');
+        stegoContent.classList.add('active');
+    }
+
+    if (mode === 'about') {
+        aboutTab.classList.add('active');
+        aboutContent.classList.add('active');
+    }
+
+}
+
+// LAUNCH HTML
+function launchContent() {
+
+    if (htmlCode.value.trim() !== "") {
+
+        const newWindow = window.open();
+        newWindow.document.open();
+        newWindow.document.write(htmlCode.value);
+        newWindow.document.close();
+
+    } else if (droppedContent) {
+
+        window.open(droppedContent, '_blank');
+
+    } else {
+
+        showNotification("⚠️ No HTML or image to launch", "error");
+
+    }
+
+}
+
+// CLEAR EDITOR
+function clearAll() {
+
+    htmlCode.value = "";
+    droppedContent = null;
+
+}
+
+// SAMPLE HTML
+function loadSample() {
+
+htmlCode.value = `<!DOCTYPE html>
+<html>
+<head>
+<title>Hello</title>
+</head>
+<body style="background:black;color:white;text-align:center;font-family:sans-serif">
+<h1>Hello from Galactic Gateway ✨</h1>
+<p>Your HTML launched successfully.</p>
+</body>
+</html>`;
+
+}
+
+// STUB FUNCTIONS (so no errors)
+function encodeMessage(){
+
+if(!carrierImage){
+showNotification("⚠️ Load a PNG carrier image first","error");
+return;
+}
+
+const message = secretMessage.value;
+
+if(!message){
+showNotification("⚠️ No HTML to encode","error");
+return;
+}
+
+const canvas = stegoCanvas;
+const ctx = canvas.getContext("2d");
+
+canvas.width = carrierImage.width;
+canvas.height = carrierImage.height;
+
+ctx.drawImage(carrierImage,0,0);
+
+const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+const data = imageData.data;
+
+const encoder = new TextEncoder();
+const msgBytes = encoder.encode(message);
+
+const length = msgBytes.length;
+
+// header + message
+const header = new Uint32Array([length]);
+const headerBytes = new Uint8Array(header.buffer);
+
+let fullData = new Uint8Array(headerBytes.length + msgBytes.length);
+fullData.set(headerBytes,0);
+fullData.set(msgBytes,4);
+
+// capacity (RGB only)
+const capacity = (data.length / 4) * 3;
+
+if(fullData.length * 8 > capacity){
+showNotification("⚠️ Image too small for this HTML","error");
+return;
+}
+
+let bitIndex = 0;
+
+for(let i=0;i<fullData.length;i++){
+
+for(let b=7;b>=0;b--){
+
+const bit = (fullData[i] >> b) & 1;
+
+// skip alpha channel
+let pixelIndex = Math.floor(bitIndex / 3) * 4 + (bitIndex % 3);
+
+data[pixelIndex] = (data[pixelIndex] & 254) | bit;
+
+bitIndex++;
+
+}
+
+}
+
+ctx.putImageData(imageData,0,0);
+
+canvas.toBlob((blob)=>{
+
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "encoded.png";
+a.click();
+
+showNotification("🌌 HTML encoded into PNG","success");
+
+});
+
+}
+function decodeMessage(){
+
+if(!carrierImage){
+showNotification("⚠️ Load encoded PNG first","error");
+return;
+}
+
+const canvas = stegoCanvas;
+const ctx = canvas.getContext("2d");
+
+canvas.width = carrierImage.width;
+canvas.height = carrierImage.height;
+
+ctx.drawImage(carrierImage,0,0);
+
+const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+const data = imageData.data;
+
+let bits = [];
+
+// read RGB only
+for(let i=0;i<data.length;i+=4){
+
+bits.push(data[i] & 1);
+bits.push(data[i+1] & 1);
+bits.push(data[i+2] & 1);
+
+}
+
+// read message length
+let lengthBytes = new Uint8Array(4);
+
+for(let i=0;i<32;i++){
+
+lengthBytes[Math.floor(i/8)] <<= 1;
+lengthBytes[Math.floor(i/8)] |= bits[i];
+
+}
+
+const length = new Uint32Array(lengthBytes.buffer)[0];
+
+// maximum capacity check
+const maxBytes = Math.floor(bits.length / 8) - 4;
+
+if(length <= 0 || length > maxBytes){
+
+showNotification("⚠️ No valid hidden data found in this PNG","error");
+return;
+
+}
+
+let messageBytes = new Uint8Array(length);
+
+let bitPointer = 32;
+
+for(let i=0;i<length;i++){
+
+let byte = 0;
+
+for(let b=0;b<8;b++){
+
+byte <<= 1;
+byte |= bits[bitPointer++];
+
+}
+
+messageBytes[i] = byte;
+
+}
+
+const decoder = new TextDecoder();
+const message = decoder.decode(messageBytes);
+
+secretMessage.value = message;
+
+showNotification("✨ Hidden HTML extracted","success");
+
+const blobman = new Blob([message], { type: "text/html" }); 
+const blobURL = URL.createObjectURL(blobman); 
+window.open(blobURL, "_blank");
+
+}
+function generateCarrierImage(){
+
+const canvas = stegoCanvas;
+const ctx = canvas.getContext("2d");
+
+canvas.width = 800;
+canvas.height = 600;
+
+const gradient = ctx.createLinearGradient(0,0,800,600);
+gradient.addColorStop(0,"#0f0520");
+gradient.addColorStop(1,"#8b5cf6");
+
+ctx.fillStyle = gradient;
+ctx.fillRect(0,0,800,600);
+
+// draw stars
+for(let i=0;i<200;i++){
+
+ctx.fillStyle="white";
+
+ctx.fillRect(
+Math.random()*800,
+Math.random()*600,
+1,
+1
+);
+
+}
+
+const img = new Image();
+img.src = canvas.toDataURL();
+
+img.onload = ()=>{
+
+carrierImage = img;
+
+previewImg.src = img.src;
+
+imagePreview.classList.remove("hidden");
+
+updateStegoStatus("Generated carrier image 800×600");
+
+};
+
+showNotification("🌠 Carrier image generated","success");
+
+}
+function clearStego(){
+    secretMessage.value="";
+    carrierImage=null;
+    imagePreview.classList.add("hidden");
+}
 
 // expose functions for buttons
 window.switchToMode = switchToMode;
