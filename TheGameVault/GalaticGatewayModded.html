@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <audio src="https://cdn.jsdelivr.net/gh/shayderrr/Static@main/Ambient-BreakcoreDnB-Mix-02.mp3" autoplay loop></audio>
     <title>Nexus Hub - Cosmic File Operations</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -420,7 +421,8 @@
     <div class="orb orb-3"></div>
 
     <!-- Main container -->
-    <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="galacticApp">
+<div class="flex items-center justify-center min-h-screen p-4">
         <div class="glass-card w-full max-w-5xl rounded-3xl p-8 md:p-10">
             <!-- Header -->
             <div class="text-center mb-10">
@@ -708,493 +710,197 @@ Upload File
     </div>
 
     <script>
-        // State Management
-        let currentMode = 'launcher';
-        let carrierImage = null;
-        let droppedFile = null;
-        let droppedContent = null;
+(function () {
 
-        // DOM Elements
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const htmlCode = document.getElementById('htmlCode');
-        const secretMessage = document.getElementById('secretMessage');
-        const stegoCanvas = document.getElementById('stegoCanvas');
-        const notificationArea = document.getElementById('notificationArea');
-        const stegoStatus = document.getElementById('stegoStatus');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImg = document.getElementById('previewImg');
+// State Management
+let currentMode = 'launcher';
+let carrierImage = null;
+let droppedFile = null;
+let droppedContent = null;
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            setupEventListeners();
-        });
+// App root (scoping fix)
+const app = document.getElementById("galacticApp");
 
-        function setupEventListeners() {
-            // File input
-            dropZone.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileSelect);
-            
-            // Drag and drop
-            dropZone.addEventListener('dragover', handleDragOver);
-            dropZone.addEventListener('dragleave', handleDragLeave);
-            dropZone.addEventListener('drop', handleDrop);
-            
-            // Prevent default drag behavior
-            document.addEventListener('dragover', (e) => e.preventDefault());
-            document.addEventListener('drop', (e) => e.preventDefault());
+// DOM Elements (scoped to app)
+const dropZone = app.querySelector('#dropZone');
+const fileInput = app.querySelector('#fileInput');
+const htmlCode = app.querySelector('#htmlCode');
+const secretMessage = app.querySelector('#secretMessage');
+const stegoCanvas = app.querySelector('#stegoCanvas');
+const notificationArea = app.querySelector('#notificationArea');
+const stegoStatus = app.querySelector('#stegoStatus');
+const imagePreview = app.querySelector('#imagePreview');
+const previewImg = app.querySelector('#previewImg');
+
+// Safe initialization (works inside larger pages)
+function initApp() {
+    setupEventListeners();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initApp);
+} else {
+    initApp();
+}
+
+function setupEventListeners() {
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileSelect);
+
+    dropZone.addEventListener('dragover', handleDragOver);
+    dropZone.addEventListener('dragleave', handleDragLeave);
+    dropZone.addEventListener('drop', handleDrop);
+
+    document.addEventListener('dragover', (e) => e.preventDefault());
+    document.addEventListener('drop', (e) => e.preventDefault());
+
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    dropZone.classList.add('active');
+}
+
+function handleDragLeave(e) {
+    e.preventDefault();
+    dropZone.classList.remove('active');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    dropZone.classList.remove('active');
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) processFile(files[0]);
+}
+
+function handleFileSelect(e) {
+    const files = e.target.files;
+    if (files.length > 0) processFile(files[0]);
+}
+
+function processFile(file) {
+
+    const fileName = file.name;
+    const fileExt = fileName.split('.').pop().toLowerCase();
+
+    droppedFile = file;
+
+    if (currentMode === 'launcher') {
+
+        if (fileExt === 'html') {
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                htmlCode.value = e.target.result;
+                showNotification(`✨ HTML file "${fileName}" loaded`, 'success');
+            };
+
+            reader.readAsText(file);
+
+        } else if (['jpg','jpeg','png','gif','webp','svg'].includes(fileExt)) {
+
+            droppedContent = URL.createObjectURL(file);
+            showNotification(`🌟 Image "${fileName}" ready to launch`, 'success');
+
         }
 
-        function handleDragOver(e) {
-            e.preventDefault();
-            dropZone.classList.add('active');
-        }
+    } else if (currentMode === 'stego') {
 
-        function handleDragLeave(e) {
-            e.preventDefault();
-            dropZone.classList.remove('active');
-        }
+        if (fileExt === 'png') {
 
-        function handleDrop(e) {
-            e.preventDefault();
-            dropZone.classList.remove('active');
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                processFile(files[0]);
-            }
-        }
+            const reader = new FileReader();
 
-        function handleFileSelect(e) {
-            const files = e.target.files;
-            if (files.length > 0) {
-                processFile(files[0]);
-            }
-        }
+            reader.onload = (e) => {
 
-        function processFile(file) {
-            const fileName = file.name;
-            const fileExt = fileName.split('.').pop().toLowerCase();
-            
-            droppedFile = file;
-            
-            if (currentMode === 'launcher') {
-                if (fileExt === 'html') {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        htmlCode.value = e.target.result;
-                        showNotification(`✨ HTML file "${fileName}" loaded`, 'success');
-                    };
-                    reader.readAsText(file);
-                } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(fileExt)) {
-                    droppedContent = URL.createObjectURL(file);
-                    showNotification(`🌟 Image "${fileName}" ready to launch`, 'success');
-                }
-            } else if (currentMode === 'stego') {
-                if (fileExt === 'png') {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            carrierImage = img;
-                            previewImg.src = e.target.result;
-                            imagePreview.classList.remove('hidden');
-                            updateStegoStatus(`Carrier loaded: ${fileName} (${img.width}×${img.height}px)`);
-                            showNotification(`🔮 Carrier image loaded: ${img.width}×${img.height}px`, 'success');
-                        };
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                } else if (fileExt === 'html') {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        secretMessage.value = e.target.result;
-                        showNotification('📝 HTML code loaded into message field', 'success');
-                    };
-                    reader.readAsText(file);
-                } else {
-                    showNotification('⚠️ Steganography requires PNG images', 'error');
-                }
-            }
-        }
+                const img = new Image();
 
-        function switchToMode(mode) {
-            // Update current mode
-            currentMode = mode;
-            
-            // Update navigation
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(mode + 'Tab').classList.add('active');
-            
-            // Update content
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            
-            // Small delay for smooth transition
-            setTimeout(() => {
-                document.getElementById(mode + 'Content').classList.add('active');
-            }, 50);
-            
-            // Update file input accept attribute
-            if (mode === 'stego') {
-                fileInput.setAttribute('accept', '.png,.html');
-            } else {
-                fileInput.setAttribute('accept', '.html,.jpg,.jpeg,.png,.gif,.webp,.svg,.bmp,.ico');
-            }
-        }
+                img.onload = () => {
 
-        function launchContent() {
-            let content = htmlCode.value.trim();
-            
-            if (!content && !droppedContent) {
-                showNotification('⚡ Please provide content to launch', 'error');
-                return;
-            }
-            
-            const newWindow = window.open('', '_blank');
-            
-            if (!newWindow) {
-                showNotification('🚀 Please allow pop-ups for launch', 'error');
-                return;
-            }
-            
-            if (droppedContent) {
-                // Launch image
-                var htmlContent = '<!DOCTYPE html>' +
-                    '<html>' +
-                    '<head>' +
-                    '<title>Cosmic Image Viewer</title>' +
-                    '<style>' +
-                    'body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #000000, #0f0520); }' +
-                    'img { max-width: 95vw; max-height: 95vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3); }' +
-                    '</style>' +
-                    '</head>' +
-                    '<body>' +
-                    '<img src="' + droppedContent + '" alt="Image">' +
-                    '</body>' +
-                    '</html>';
-                newWindow.document.write(htmlContent);
-                droppedContent = null;
-            } else {
-                // Launch HTML
-                newWindow.document.write(content);
-            }
-            
-            newWindow.document.close();
-            showNotification('🚀 Launched into the cosmos', 'success');
-        }
+                    carrierImage = img;
+                    previewImg.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
 
-        function generateCarrierImage() {
-            // Generate a random gradient image
-            const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 600;
-            const ctx = canvas.getContext('2d');
-            
-            // Create cosmic gradient
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            const hue1 = Math.floor(Math.random() * 360);
-            const hue2 = (hue1 + 60) % 360;
-            gradient.addColorStop(0, `hsl(${hue1}, 70%, 50%)`);
-            gradient.addColorStop(0.5, `hsl(${hue2}, 60%, 40%)`);
-            gradient.addColorStop(1, `hsl(${hue1}, 80%, 30%)`);
-            
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add some cosmic noise/stars
-            for (let i = 0; i < 200; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const size = Math.random() * 2;
-                ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.8})`;
-                ctx.fillRect(x, y, size, size);
-            }
-            
-            // Convert to image
-            canvas.toBlob((blob) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        carrierImage = img;
-                        previewImg.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                        updateStegoStatus(`Generated carrier: ${img.width}×${img.height}px`);
-                        showNotification('🎨 Cosmic carrier image generated!', 'success');
-                    };
-                    img.src = e.target.result;
+                    updateStegoStatus(`Carrier loaded: ${fileName} (${img.width}×${img.height}px)`);
+
+                    showNotification(`🔮 Carrier image loaded`, 'success');
+
                 };
-                reader.readAsDataURL(blob);
-            }, 'image/png');
-        }
 
-        function encodeMessage() {
-            if (!carrierImage) {
-                showNotification('📷 Please load or generate a PNG carrier image first', 'error');
-                return;
-            }
-            
-            const message = secretMessage.value.trim();
-            if (!message) {
-                showNotification('✍️ Please enter HTML code to hide', 'error');
-                return;
-            }
-            
-            const ctx = stegoCanvas.getContext('2d');
-            stegoCanvas.width = carrierImage.width;
-            stegoCanvas.height = carrierImage.height;
-            ctx.drawImage(carrierImage, 0, 0);
-            
-            const imageData = ctx.getImageData(0, 0, carrierImage.width, carrierImage.height);
-            const pixels = imageData.data;
-            
-            // Convert message to binary
-            const messageBytes = new TextEncoder().encode(message);
-            const messageLength = messageBytes.length;
-            
-            // Check if image is large enough
-            const requiredPixels = (messageLength + 4) * 8;
-            const availablePixels = pixels.length / 4;
-            
-            if (availablePixels < requiredPixels) {
-                showNotification(`📐 Image too small! Need ${requiredPixels} pixels, have ${availablePixels}`, 'error');
-                return;
-            }
-            
-            // Encode length (4 bytes = 32 bits)
-            const lengthBytes = new Uint8Array(4);
-            new DataView(lengthBytes.buffer).setUint32(0, messageLength, true);
-            
-            let dataIndex = 0;
-            
-            // Encode length into first 32 pixels
-            for (let i = 0; i < 4; i++) {
-                for (let bit = 0; bit < 8; bit++) {
-                    const pixelIndex = dataIndex * 4; // Red channel of each pixel
-                    pixels[pixelIndex] = (pixels[pixelIndex] & 0xFE) | ((lengthBytes[i] >> bit) & 1);
-                    dataIndex++;
-                }
-            }
-            
-            // Encode message bytes
-            for (let i = 0; i < messageLength; i++) {
-                for (let bit = 0; bit < 8; bit++) {
-                    const pixelIndex = dataIndex * 4; // Red channel
-                    pixels[pixelIndex] = (pixels[pixelIndex] & 0xFE) | ((messageBytes[i] >> bit) & 1);
-                    dataIndex++;
-                }
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-            
-            // Download encoded image
-            stegoCanvas.toBlob((blob) => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'cosmic_encoded.png';
-                a.click();
-                URL.revokeObjectURL(url);
-                showNotification(`🔐 HTML encoded! ${messageLength} bytes hidden in ${dataIndex} pixels`, 'success');
-            }, 'image/png');
-        }
+                img.src = e.target.result;
 
-        function decodeMessage() {
+            };
 
-    if (!carrierImage) {
-        showNotification('📷 Please load an encoded PNG image', 'error');
-        return;
-    }
+            reader.readAsDataURL(file);
 
-    const ctx = stegoCanvas.getContext('2d');
-    stegoCanvas.width = carrierImage.width;
-    stegoCanvas.height = carrierImage.height;
+        } else if (fileExt === 'html') {
 
-    ctx.drawImage(carrierImage, 0, 0);
+            const reader = new FileReader();
 
-    const imageData = ctx.getImageData(0, 0, carrierImage.width, carrierImage.height);
-    const pixels = imageData.data;
+            reader.onload = (e) => {
+                secretMessage.value = e.target.result;
+                showNotification('📝 HTML loaded', 'success');
+            };
 
-    let dataIndex = 0;
+            reader.readAsText(file);
 
-    // read message length
-    const lengthBytes = new Uint8Array(4);
-
-    for (let i = 0; i < 4; i++) {
-
-        let byte = 0;
-
-        for (let bit = 0; bit < 8; bit++) {
-
-            const pixelIndex = dataIndex * 4;
-            byte |= (pixels[pixelIndex] & 1) << bit;
-
-            dataIndex++;
-
-        }
-
-        lengthBytes[i] = byte;
-
-    }
-
-    const messageLength = new DataView(lengthBytes.buffer).getUint32(0, true);
-
-    if (messageLength <= 0 || messageLength > pixels.length / 4) {
-        showNotification('🔍 No hidden message found', 'error');
-        return;
-    }
-
-    const messageBytes = new Uint8Array(messageLength);
-
-    for (let i = 0; i < messageLength; i++) {
-
-        let byte = 0;
-
-        for (let bit = 0; bit < 8; bit++) {
-
-            const pixelIndex = dataIndex * 4;
-            byte |= (pixels[pixelIndex] & 1) << bit;
-
-            dataIndex++;
-
-        }
-
-        messageBytes[i] = byte;
-
-    }
-
-    try {
-
-        const decodedMessage = new TextDecoder().decode(messageBytes);
-
-        secretMessage.value = decodedMessage;
-
-        // launch HTML
-        const blob = new Blob([decodedMessage], { type: "text/html" });
-        const blobURL = URL.createObjectURL(blob);
-
-        const win = window.open(blobURL, "_blank");
-
-        if (!win) {
-            showNotification('🔓 Decoded! Enable popups to launch HTML.', 'success');
         } else {
-            showNotification(`🔓 Decoded ${messageLength} bytes and launched HTML!`, 'success');
+
+            showNotification('⚠️ Steganography requires PNG images', 'error');
+
         }
-
-        setTimeout(() => URL.revokeObjectURL(blobURL), 5000);
-
-    } catch (err) {
-
-        showNotification('❌ Failed to decode hidden data', 'error');
 
     }
 
 }
 
+function updateStegoStatus(message) {
 
+    stegoStatus.innerHTML =
+        `<div class="status-dot mr-2"></div><span>${message}</span>`;
 
-        function updateStegoStatus(message) {
-            stegoStatus.innerHTML = `<div class="status-dot mr-2"></div><span>${message || 'Ready for quantum encoding'}</span>`;
-        }
+}
 
-        function showNotification(message, type = 'info') {
-            const colors = {
-                success: 'border-purple-500/30 text-purple-300',
-                error: 'border-red-500/30 text-red-300',
-                info: 'border-purple-500/30 text-purple-300'
-            };
-            
-            notificationArea.className = `notification rounded-xl p-4 mb-6 ${colors[type]}`;
-            notificationArea.innerHTML = `
-                <div class="flex items-center">
-                    <span class="text-sm md:text-base">${message}</span>
-                </div>
-            `;
-            notificationArea.classList.remove('hidden');
-            
-            setTimeout(() => {
-                notificationArea.classList.add('hidden');
-            }, 5000);
-        }
+function showNotification(message,type='info') {
 
-        function clearAll() {
-            htmlCode.value = '';
-            droppedContent = null;
-            showNotification('✨ Launcher cleared', 'info');
-        }
+    const colors = {
+        success:'border-purple-500/30 text-purple-300',
+        error:'border-red-500/30 text-red-300',
+        info:'border-purple-500/30 text-purple-300'
+    };
 
-        function clearStego() {
-            secretMessage.value = '';
-            carrierImage = null;
-            imagePreview.classList.add('hidden');
-            updateStegoStatus('Ready for quantum encoding');
-            showNotification('✨ Steganography cleared', 'info');
-        }
+    notificationArea.className =
+        `notification rounded-xl p-4 mb-6 ${colors[type]}`;
 
-        function loadSample() {
-            htmlCode.value = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmic Sample</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 500px;
-        }
-        h1 {
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-        p {
-            color: #000;
-            line-height: 1.6;
-        }
-        .time {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            color: white;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>✨ Hello, Cosmos!</h1>
-        <p>Welcome to the Galactic Gateway sample page. This is a glimpse into the infinite possibilities of the digital universe.</p>
-        <div class="time" id="time"></div>
-    </div>
-    <script>
-        function updateTime() {
-            document.getElementById("time").textContent = new Date().toLocaleTimeString();
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-    </scr` + `ipt>
-</body>
-</html>`;
-            showNotification('🌟 Sample HTML loaded', 'success');
-        }
-    </script>
+    notificationArea.innerHTML =
+        `<div class="flex items-center">
+        <span class="text-sm md:text-base">${message}</span>
+        </div>`;
+
+    notificationArea.classList.remove('hidden');
+
+    setTimeout(()=>{
+
+        notificationArea.classList.add('hidden');
+
+    },5000);
+
+}
+
+// expose functions for buttons
+window.switchToMode = switchToMode;
+window.launchContent = launchContent;
+window.clearAll = clearAll;
+window.loadSample = loadSample;
+window.encodeMessage = encodeMessage;
+window.decodeMessage = decodeMessage;
+window.generateCarrierImage = generateCarrierImage;
+window.clearStego = clearStego;
+
+})();
+</script>
+</div>
 </body>
 </html>
