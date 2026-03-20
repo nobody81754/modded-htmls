@@ -633,6 +633,7 @@ Upload File
                                 Clear All
                             </button>
                         </div>
+                        <center><button onclick="openmachinegen()" class="text-sm text-purple-300 mb-2">Open Carrier image generator (Click here)</button></center>
                     </div>
 
                     <div class="feature-card rounded-xl p-5">
@@ -712,16 +713,16 @@ Upload File
     <script>
 (function () {
 
-// State Management
+
 let currentMode = 'launcher';
 let carrierImage = null;
 let droppedFile = null;
 let droppedContent = null;
 
-// App root (scoping fix)
+
 const app = document.getElementById("galacticApp");
 
-// DOM Elements (scoped to app)
+
 const dropZone = app.querySelector('#dropZone');
 const fileInput = app.querySelector('#fileInput');
 const htmlCode = app.querySelector('#htmlCode');
@@ -732,16 +733,25 @@ const stegoStatus = app.querySelector('#stegoStatus');
 const imagePreview = app.querySelector('#imagePreview');
 const previewImg = app.querySelector('#previewImg');
 
-// Safe initialization (works inside larger pages)
+
 function initApp() {
     setupEventListeners();
 }
+window.openmachinegen = async function () {
+  try {
+    const responses = await fetch("https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@main/TheGameVault/imagegenerator.html");
+    const htmls = await responses.text();
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initApp);
-} else {
-    initApp();
-}
+    const newWindow = window.open("about:blank", "_blank");
+
+    newWindow.document.open();
+    newWindow.document.write(htmls);
+    newWindow.document.close();
+
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
 
 function setupEventListeners() {
 
@@ -1189,6 +1199,7 @@ function clearStego(){
     carrierImage=null;
     imagePreview.classList.add("hidden");
 }
+
 
 // expose functions for buttons
 window.switchToMode = switchToMode;
