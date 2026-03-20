@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrier Image Generator</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #1a1a1a; color: white; padding: 20px; }
+        .canvas-container { margin: 20px; border: 2px solid #444; border-radius: 8px; overflow: hidden; }
+        #previewImg { max-width: 100%; height: auto; display: block; }
+        .hidden { display: none; }
+        button { background: #8b5cf6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+        button:hover { background: #7c3aed; }
+        #status { margin-top: 10px; color: #a78bfa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <h1>Carrier Image Generator</h1>
+    <input id="width22" placeholder="Width" value="800" max="2000"><br>
+    <input id="height23" placeholder="height" value="600"><br>
+    <button onclick="generateCarrierImage()">Generate image</button>
+
+    <div id="imagePreview" class="canvas-container hidden">
+        <img id="previewImg" alt="Generated carrier">
+    </div>
+
+    <p id="status"></p>
+
+    <canvas id="stegoCanvas" style="display:none;"></canvas>
+
+    <script>
+        // Your logic integrated here
+        const stegoCanvas = document.getElementById("stegoCanvas");
+        const previewImg = document.getElementById("previewImg");
+        const imagePreview = document.getElementById("imagePreview");
+        const statusText = document.getElementById("status");
+       
+
+        function updateStegoStatus(msg) {
+            statusText.innerText = msg;
+        }
+
+        function showNotification(msg) {
+            console.log(msg);
+        }
+
+        function generateCarrierImage() {
+            const canvasman = stegoCanvas;
+            const ctx = canvasman.getContext("2d");
+            const widthman = document.getElementById("width22").value;
+            const heightman = document.getElementById("height23").value;
+
+            canvasman.width = widthman;
+            canvasman.height = heightman;
+
+            const gradient = ctx.createLinearGradient(0, 0, 800, 600);
+            gradient.addColorStop(0, "#0f0520");
+            gradient.addColorStop(1, "#8b5cf6");
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, widthman, heightman);
+
+            // Draw stars
+            for (let i = 0; i < (widthman * heightman)/2400; i++) {
+                ctx.fillStyle = "white";
+                ctx.fillRect(
+                    Math.random() * widthman,
+                    Math.random() * heightman,
+                    1,
+                    1
+                );
+            }
+
+            
+            const datasURL = canvasman.toDataURL("image/png");
+            previewImg.src = datasURL;
+           
+            
+            imagePreview.classList.remove("hidden");
+            updateStegoStatus("Generated carrier image!");
+            showNotification("🌠 Carrier image generated");
+        }
+    </script>
+</body>
+</html>
