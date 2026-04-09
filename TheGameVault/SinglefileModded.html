@@ -947,7 +947,7 @@
         
         
         <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@master/TheGameVault/robloxrun.html">Roblox Runner (Soon)</div>
-        <div class="nav-link" id="eg19">EaglerCraft-1.9 (new)</div>
+        
       </li>
       <li><div class="nav-category">⚙️ AI Games</div>
         <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/snake.html">Snake</div>
@@ -2344,28 +2344,7 @@ const superGamesHTML = `
 </html>
 `;
 
-const eag19 = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    html, body { padding: 0; margin: 0; height: 100%; }
-    .button { display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; background-color: #000; color: #fff; font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; cursor: pointer; text-decoration: none; transition: background-color 0.3s; }
-    .button:hover { background-color: #4a148c; }
-  </style>
-</head>
-<body>
-  <a id="button" class="button">Launch In A New Tab</a>
-  <script>
-    document.getElementById('button').addEventListener('click', function(){
-      window.showLaunchModal('https://cdn.jsdelivr.net/gh/nobody81754/thefiles@master/EaglerCraft-1.9.html');
-    });
-  <\/script>
-</body>
-</html>
-`;
+
     /// for devs, set func here, for ex js copy and then link it
 function setContent(html) {
   contentDisplay.innerHTML = html;
@@ -2432,12 +2411,7 @@ document.getElementById('operatingsystem').addEventListener('click', function(e)
   menu.classList.remove('open');
 });
 
-  document.getElementById('eg19').addEventListener('click', function(e){
-  e.preventDefault();
-  setContent(eag19);
-  hamburger.classList.remove('active');
-  menu.classList.remove('open');
-});
+  
     loadHomePage();
   </script>
 </body>
