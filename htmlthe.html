@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <audio src="https://cdn.jsdelivr.net/gh/shayderrr/Static@main/Ambient-BreakcoreDnB-Mix-02.mp3" autoplay loop></audio>
+  <link rel="icon" href="https://instructure-uploads.s3.amazonaws.com/account_30000000002042/attachments/80746393/favicon-16x16.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+  
+</head>
+<body>
+
+<div id="start-text">
+  <h1>Click the button above</h1>
+</div>
+  <div class="bg"></div>
+  <div class="stars"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <header>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+  <nav class="menu" id="menu">
+    <div class="close-btn" id="closeBtn" style="display: none;"> </div>
+    <ul class="nav-list">
+      <li><div class="nav-link nav-home">Home</div></li>
+      <li><div class="nav-link disguise-btn" id="changeDisguiseBtn">🎭 Change Disguise</div></li>
+      <li><div class="nav-category">🕹️ Home Page</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@2057dace702c51405ad7cae4cd3ad9b9ecbbfa79/annoucements.html">Annoucements</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@d3eb0c7dae57730b5b870b44004436e743b6a3cc/guidelines.html">Guidelines</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@282c390e7bfdc29358991cbb387ff3f947a17ba0/tac.html">Terms & Conditions</div>
+      </li>
+      <li><div class="nav-category">🎮 Games</div>
+        <div class="nav-link" id="htmlGamesLocalLink">HTML Games</div>
+        <div class="nav-link" id="moreGamesLink">More Games</div>
+        <div class="nav-link" id="ownerGamesLink">Owner Games</div>
+        <div class="nav-link" id="ethansGamesLink">Backup Games</div>
+        <div class="nav-link" id="extremeGamesLink">Extreme Games</div>
+        <div class="nav-link" id="dominumGamesLink">Dominum UBG</div>
+        
+        
+        <div class="nav-link" id="superGamesLink">Super Games</div>
+        
+        
+        
+        
+        
+      </li>
+      <li><div class="nav-category">⚙️ AI Games</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/snake.html">Snake</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/tetris.html">Tetris</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/2048.html">2048</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/mines.html">Mines</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/break.html">Breakout</div>
+      </li>
+      
+      <li><div class="nav-category">🛠️ Tools</div>
+  
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/google.html">Google Web</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@main/zen.html">Browser Web</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@master/TheGameVault/GalaticGatewayModded.html">File Operations</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@00bcaeec990381e630b1d736ba3cedbf7d6c8da4/text.html">Text Encryptor</div>
+        <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@5e88925ee5112dc02c8699b6e0802545ef6ba2ee/youtube.html">📺 YouTube</div>
+        
+        <div class="nav-link" id="operatingsystem">💻 OS System</div>
+      </li>
+     
+     
+      <li><div class="nav-category">🌐 Google Docs</div>
+      <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@c1aea70bc188155d5d15ca78aa0aca071eb788e8/seed.html">Seed Network</div>
+      <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@3e101166f3a669d88b2bf9d5d869b4256300cfa5/incog.html">Incog Network</div>
+      <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@508ec33ace5bb2cbc3dbc5ee85ee3f8c817f6da6/lb.html">Lebron Network</div>
+      <div class="nav-link" data-src="https://cdn.jsdelivr.net/gh/shayderrr/676767@9318dbe582dc8a91e97746dff301cb0e97c5bc2c/freddy.html">Freddies Internet</div>
+    </ul>
+  </nav>
+  <!-- DISGUISE MODAL -->
+<div class="disguise-overlay" id="disguiseOverlay">
+  <div class="disguise-modal">
+    <h2>🎭 Change Disguise</h2>
+    <div class="current-info">
+      <p>Current Title:</p>
+      <div class="val" id="curTitle">Dashboard</div>
+      <p style="margin-top:.5rem;">Current Favicon:</p>
+      <div class="val" id="curFavicon">Default</div>
+    </div>
+    <div class="form-group">
+      <label>Page Title</label>
+      <input type="text" id="inputTitle" placeholder="e.g., Google Docs">
+      <div class="presets">
+        <button class="preset" data-t="Google Docs" data-f="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">Google Docs</button>
+        <button class="preset" data-t="Google Slides" data-f="https://ssl.gstatic.com/docs/presentations/images/favicon-2023q4.ico">Google Slides</button>
+        <button class="preset" data-t="Dashboard" data-f="https://instructure-uploads.s3.amazonaws.com/account_30000000002042/attachments/80746393/favicon-16x16.png">Canvas</button>
+        <button class="preset" data-t="Google" data-f="https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico">Google</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Favicon URL</label>
+      <input type="text" id="inputFavicon" placeholder="https://example.com/favicon.ico">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="disguiseCancel">Cancel</button>
+      <button class="btn-reset" id="disguiseReset">Reset</button>
+      <button class="btn-apply" id="disguiseApply">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- LAUNCH MODAL -->
+<div class="launch-overlay" id="launchOverlay">
+  <div class="launch-modal">
+    <h2>🚀 Launch Game</h2>
+    <p>Ready to launch. Customize the tab appearance.</p>
+    <div class="check-group">
+      <input type="checkbox" id="customCheck">
+      <label for="customCheck">Customize game tab disguise</label>
+    </div>
+    <div class="launch-opts" id="launchOpts">
+      <div class="form-group">
+        <label>Tab Title</label>
+        <input type="text" id="launchTitle" placeholder="e.g., Google Docs">
+        <div class="presets">
+          <button class="preset lp" data-t="Google Docs" data-f="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">Docs</button>
+          <button class="preset lp" data-t="Google Slides" data-f="https://ssl.gstatic.com/docs/presentations/images/favicon-2023q4.ico">Slides</button>
+          <button class="preset lp" data-t="Dashboard" data-f="https://instructure-uploads.s3.amazonaws.com/account_30000000002042/attachments/80746393/favicon-16x16.png">Canvas</button>
+          <button class="preset lp" data-t="Google" data-f="https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico">Google</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Favicon URL</label>
+        <input type="text" id="launchFavicon" placeholder="https://example.com/favicon.ico">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="launchCancel">Cancel</button>
+      <button class="btn-launch" id="launchGo">🎮 Launch</button>
+    </div>
+  </div>
+</div>
+  <div id="container">
+    <div id="content-display"></div>
+  </div>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="script.js">
+    
+  </script>
+</body>
+</html>
