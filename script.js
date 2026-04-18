@@ -63,7 +63,6 @@ document.getElementById('changeDisguiseBtn').addEventListener('click', () => {
   hamburger.classList.remove('active'); 
   menu.classList.remove('open'); 
 });
-document.getElementById('disguiseCancel').addEventListener('click', () => disguiseOverlay.classList.remove('show'));
 document.getElementById('disguiseReset').addEventListener('click', () => { resetDisguise(); disguiseOverlay.classList.remove('show'); });
 document.getElementById('disguiseApply').addEventListener('click', () => {
   const t = document.getElementById('inputTitle').value.trim();
