@@ -1,4 +1,3 @@
-<script>
 (function(){
 if(!document.head) document.documentElement.appendChild(document.createElement("head"));
 (function(parent){
