@@ -1001,4 +1001,3 @@ function runInlineScripts(){
 
 loadScriptsSequentially([...externalScripts], runInlineScripts);
 })();
-</script>
