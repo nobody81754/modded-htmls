@@ -940,6 +940,7 @@
         <div class="nav-link" id="ethansGamesLink">Backup Games</div>
         <div class="nav-link" id="extremeGamesLink">Extreme Games</div>
         <div class="nav-link" id="dominumGamesLink">Dominum UBG</div>
+        <div class="nav-link" id="blooket">Blooketv1</div>
         
         
         <div class="nav-link" id="superGamesLink">Super Games</div>
@@ -2343,7 +2344,28 @@ const superGamesHTML = `
 </body>
 </html>
 `;
-
+const blooketHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body { padding: 0; margin: 0; height: 100%; }
+    .button { display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; background-color: #000; color: #fff; font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; cursor: pointer; text-decoration: none; transition: background-color 0.3s; }
+    .button:hover { background-color: #4a148c; }
+  </style>
+</head>
+<body>
+  <a id="button" class="button">Launch In A New Tab</a>
+  <script>
+    document.getElementById('button').addEventListener('click', function(){
+      window.showLaunchModal('https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@master/blooket.html');
+    });
+  <\/script>
+</body>
+</html>
+`;
 
     /// for devs, set func here, for ex js copy and then link it
 function setContent(html) {
@@ -2410,7 +2432,12 @@ document.getElementById('operatingsystem').addEventListener('click', function(e)
   hamburger.classList.remove('active');
   menu.classList.remove('open');
 });
-
+document.getElementById('blooket').addEventListener('click', function(e){
+  e.preventDefault();
+  setContent(blooketHTML);
+  hamburger.classList.remove('active');
+  menu.classList.remove('open');
+});
   
     loadHomePage();
   </script>
