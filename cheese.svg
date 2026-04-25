@@ -1,0 +1,93 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position: fixed; inset: 0;">
+<foreignObject x="0" y="0" width="100%" height="100%">
+<body xmlns="http://www.w3.org/1999/xhtml" lang="en" style="margin: 0; width: 100%; height: 100%; min-height: 100vh; overflow: auto;">
+<div id="root"></div>
+<style><![CDATA[
+html,
+body,
+#root {
+width: 100%;
+min-height: 100vh;
+}
+
+body {
+margin: 0;
+background-size: 24px 24px;
+opacity: 1;
+}
+]]></style>
+<script><![CDATA[
+(() => {
+const ns = 'http://www.w3.org/1999/xhtml';
+const body = document.querySelector('body');
+if (!body) return;
+const svgRoot = document.documentElement;
+
+const head = document.createElementNS(ns, 'head');
+body.prepend(head);
+
+const htmlRoot = body.parentElement && body.parentElement.namespaceURI === ns
+? body.parentElement
+: body;
+
+try {
+Object.defineProperty(document, 'head', {
+configurable: true,
+get() {
+return head;
+},
+});
+} catch {}
+
+try {
+Object.defineProperty(document, 'body', {
+configurable: true,
+get() {
+return body;
+},
+});
+} catch {}
+
+try {
+Object.defineProperty(document, 'documentElement', {
+configurable: true,
+get() {
+return htmlRoot;
+},
+});
+} catch {}
+
+try {
+Object.defineProperty(svgRoot, 'className', {
+configurable: true,
+get() {
+return svgRoot.getAttribute('class') || '';
+},
+set(value) {
+svgRoot.setAttribute('class', value || '');
+},
+});
+} catch {}
+
+const originalCreateElement = document.createElement.bind(document);
+document.createElement = function createElement(tagName, options) {
+return typeof tagName === 'string'
+? document.createElementNS(ns, tagName, options)
+: originalCreateElement(tagName, options);
+};
+})();
+
+
+const title = document.createElement('title');
+title.textContent = 'Blocked';
+document.head.appendChild(title);
+const script1 = document.createElement('script');
+script1.src = 'data:@file/javascript;base64,KGZ1bmN0aW9uKCkgew0KICAgIC8vIDEuIENyZWF0ZSB0aGUgaWZyYW1lIGVsZW1lbnQNCiAgICBjb25zdCBpZnJhbWUgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdpZnJhbWUnKTsNCg0KICAgIC8vIDIuIFNldCB0aGUgc291cmNlIFVSTA0KICAgIGlmcmFtZS5zcmMgPSAiaHR0cHM6Ly9wbGF5LmNoZXNzYmFzZS5jb20vIjsNCg0KICAgIC8vIDMuIFNldCB0aGUgd2lkdGggYW5kIGhlaWdodCBhdHRyaWJ1dGVzDQogICAgaWZyYW1lLnNldEF0dHJpYnV0ZSgnd2lkdGgnLCAnMTAwJScpOw0KICAgIGlmcmFtZS5zZXRBdHRyaWJ1dGUoJ2hlaWdodCcsICcxMDAlJyk7DQoNCiAgICAvLyA0LiBBcHBseSB0aGUgQ1NTIHN0eWxlcyBkaXJlY3RseSB0byB0aGUgZWxlbWVudA0KICAgIGlmcmFtZS5zdHlsZS5ib3JkZXIgPSAibm9uZSI7DQogICAgaWZyYW1lLnN0eWxlLnBvc2l0aW9uID0gImZpeGVkIjsNCiAgICBpZnJhbWUuc3R5bGUudG9wID0gIjAiOw0KICAgIGlmcmFtZS5zdHlsZS5sZWZ0ID0gIjAiOw0KDQogICAgLy8gNS4gQXBwZW5kIHRoZSBpZnJhbWUgdG8gdGhlIGJvZHkgb2YgdGhlIGRvY3VtZW50DQogICAgLy8gV2UgdXNlIGEgY2hlY2sgdG8gZW5zdXJlIHRoZSBib2R5IGV4aXN0cyBiZWZvcmUgYXBwZW5kaW5nDQogICAgaWYgKGRvY3VtZW50LmJvZHkpIHsNCiAgICAgICAgZG9jdW1lbnQuYm9keS5hcHBlbmRDaGlsZChpZnJhbWUpOw0KICAgIH0gZWxzZSB7DQogICAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJywgKCkgPT4gew0KICAgICAgICAgICAgZG9jdW1lbnQuYm9keS5hcHBlbmRDaGlsZChpZnJhbWUpOw0KICAgICAgICB9KTsNCiAgICB9DQp9KSgpOw==';
+document.head.appendChild(script1);
+
+
+]]></script>
+</body>
+</foreignObject>
+</svg>
