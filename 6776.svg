@@ -1,0 +1,17 @@
+
+
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position: fixed; top: 0; left: 0;">
+  <foreignObject x="0" y="0" width="100%" height="100%">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <meta content='width=device-width, initial-scale=1.0' name='viewport'></meta>
+      <iframe style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;" id="game-frame"></iframe>
+      
+      <script>
+        let code = "PGlucHV0IGlkPSI2N21hbiIgc3R5bGU9IndpZHRoOjMwMDsiPjxidXR0b24gb25jbGljaz0idGhlNjcoKSI+TWFjaGluZTwvYnV0dG9uPg0KPHNjcmlwdD4NCmFzeW5jIGZ1bmN0aW9uIHRoZTY3KCkgew0KICAgIGNvbnN0IGlmcmFtZSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2lmcmFtZScpOw0KICAgIGNvbnN0IG1hbnNicm8gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnNjdtYW4nKS52YWx1ZTsNCg0KICAgIHRyeSB7DQogICAgICAgICBjb25zdCB3aW4gPSB3aW5kb3cub3BlbignYWJvdXQ6YmxhbmsnLCAnX2JsYW5rJyk7DQogICAgaWYgKCF3aW4pIHJldHVybjsNCiAgICBjb25zdCByZXMgPSBhd2FpdCBmZXRjaChtYW5zYnJvKTsNCiAgICBjb25zdCBodG1sID0gYXdhaXQgcmVzLnRleHQoKTsNCg0KICAgIHdpbi5kb2N1bWVudC5vcGVuKCk7DQogICAgd2luLmRvY3VtZW50LndyaXRlKGh0bWwpOw0KICAgIHdpbi5kb2N1bWVudC5jbG9zZSgpOw0KDQogICAgICAgIGNvbnN0IGFwcGVuZElmcmFtZSA9ICgpID0+IGRvY3VtZW50LmJvZHkuYXBwZW5kQ2hpbGQoaWZyYW1lKTsNCg0KICAgICAgICANCiAgICB9IGNhdGNoIChlcnIpIHsNCiAgICAgICAgY29uc29sZS5lcnJvcigiRmFpbGVkIHRvIGxvYWQgSFRNTDoiLCBlcnIpOw0KICAgIH0NCn07PC9zY3JpcHQ+";
+        
+        var theIframe = document.getElementById('game-frame');
+        theIframe.srcdoc = atob(code);
+      </script>
+    </body>
+  </foreignObject>
+</svg>
