@@ -1,4 +1,3 @@
-loadPage('https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@latest/Others/homemod.html', this)
 async function loadPage(url, el) {
   const iframe = document.createElement('iframe');
 
@@ -66,3 +65,5 @@ window.onresize = () => {
   c.width = innerWidth;
   c.height = innerHeight;
 };
+loadPage('https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@latest/Others/homemod.html', this)
+
