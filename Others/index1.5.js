@@ -5,7 +5,7 @@ async function loadPage(url, el) {
     const response = await fetch(url);
     const HTMLCODE = await response.text();
     
-    iframe.sandbox = "allow-scripts allow-same-origin allow-popups";
+    iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox";
     iframe.srcdoc = HTMLCODE;
 
     iframe.style.width = "100%";
