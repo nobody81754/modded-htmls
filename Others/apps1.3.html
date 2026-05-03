@@ -51,15 +51,16 @@
     <iframe id="viewerFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation allow-top-navigation-by-user-activation"></iframe>
   </div>
 </div>
-<script>const grid = document.getElementById('gameGrid');
-const overlay = document.getElementById('viewerOverlay');
-const frame = document.getElementById('viewerFrame');
-const closeBtn = document.getElementById('closeBtn');
-const newTabBtn = document.getElementById('newTabBtn');
-const status = document.getElementById('status');
-const searchBox = document.getElementById('searchBox');
-const gameCountEl = document.getElementById('gameCount');
-const viewerTitle = document.getElementById('viewerTitle');
+<script>
+const grid1 = document.getElementById('gameGrid');
+const overlay1 = document.getElementById('viewerOverlay');
+const frame1 = document.getElementById('viewerFrame');
+const closeBtn1 = document.getElementById('closeBtn');
+const newTabBtn1 = document.getElementById('newTabBtn');
+const status1 = document.getElementById('status');
+const searchBox1 = document.getElementById('searchBox');
+const gameCountEl1 = document.getElementById('gameCount');
+const viewerTitle1 = document.getElementById('viewerTitle');
 
 const HTML_BASE_URL = 'https://cdn.jsdelivr.net/gh/gn-math/html@master';
 
@@ -101,69 +102,66 @@ function createCardElement(game) {
 }
 
 async function loadGames() {
-  status.style.display = 'block';
-  status.textContent = "Loading games...";
+  status1.style.display = 'block';
+  status1.textContent = "Loading games...";
   try {
     const res = await fetch('https://cdn.jsdelivr.net/gh/nobody81754/modded-htmls@latest/Others/apps1.1.json', { cache: "no-store" });
     const data = await res.json();
-    console.log(data);
 
     games = data
       .filter(g => g.id >= 0 && !g.name.includes('[!]'))
-      .map(g => ({
-        ...g
-      }));
+      .map(g => ({ ...g }));
 
     filteredGames = [...games];
 
-    grid.innerHTML = "";
+    grid1.innerHTML = "";
     filteredGames.forEach(game => {
-      grid.appendChild(createCardElement(game));
+      grid1.appendChild(createCardElement(game));
     });
 
-    gameCountEl.textContent = `Apps: ${games.length}`;
-    status.style.display = 'none';
+    gameCountEl1.textContent = `Apps: ${games.length}`;
+    status1.style.display = 'none';
   } catch (e) {
-  console.log(e);
-    status.textContent = "ERROR loading games.";
+    console.log(e);
+    status1.textContent = "ERROR loading games.";
   }
 }
 
-searchBox.addEventListener('input', () => {
-  const q = searchBox.value.toLowerCase().trim();
+searchBox1.addEventListener('input', () => {
+  const q = searchBox1.value.toLowerCase().trim();
   filteredGames = games.filter(g => g.name.toLowerCase().includes(q));
 
-  grid.innerHTML = "";
+  grid1.innerHTML = "";
   filteredGames.forEach(game => {
-    grid.appendChild(createCardElement(game));
+    grid1.appendChild(createCardElement(game));
   });
 });
 
 async function openGame(url, name) {
-  overlay.style.display = 'flex';
-  viewerTitle.textContent = name || url;
+  overlay1.style.display = 'flex';
+  viewerTitle1.textContent = name || url;
   currentGameUrl = url;
 
   try {
     const res = await fetch(url);
     const html = await res.text();
-    const doc = frame.contentWindow.document;
+    const doc = frame1.contentWindow.document;
     doc.open();
     doc.write(html);
     doc.close();
   } catch (err) {
     console.error(err);
-    frame.src = 'about:blank';
+    frame1.src = 'about:blank';
   }
 }
 
-closeBtn.onclick = () => {
-  overlay.style.display = 'none';
-  frame.src = 'about:blank';
+closeBtn1.onclick = () => {
+  overlay1.style.display = 'none';
+  frame1.src = 'about:blank';
   currentGameUrl = '';
 };
 
-newTabBtn.onclick = async () => {
+newTabBtn1.onclick = async () => {
   if (!currentGameUrl) return;
 
   try {
@@ -181,7 +179,8 @@ newTabBtn.onclick = async () => {
   }
 };
 
-loadGames();</script>
+loadGames();
+</script>
 
 </body>
 </html>
