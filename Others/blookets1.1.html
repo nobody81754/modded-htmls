@@ -15,15 +15,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blooket1-V1</title>
     <meta name="title" content="Blooket1-V1">
-    <meta name="description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloads—perfect for school or home.">
+    <meta name="description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloadsâ€”perfect for school or home.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gn-math.github.io/">
     <meta property="og:title" content="Blooket1-V1">
-    <meta property="og:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloads—perfect for school or home.">
+    <meta property="og:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloadsâ€”perfect for school or home.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://gn-math.github.io/">
     <meta name="twitter:title" content="Blooket1-V1">
-    <meta name="twitter:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloads—perfect for school or home.">
+    <meta name="twitter:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloadsâ€”perfect for school or home.">
     <style>
         :root {
             --primary: #e8ebff;
@@ -710,7 +710,7 @@
         <div class="popup">
             <div class="popup-header">
                 <h3 id="popupTitle">Title</h3>
-                <button id="popupClose" onclick="closePopup()">×</button>
+                <button id="popupClose" onclick="closePopup()">Ã—</button>
             </div>
             <div id="popupBody">
                 Content will be here
@@ -800,7 +800,7 @@
                                     popup.innerHTML = `Play more games at <a href="https://Blooket1-V1.github.io" target="_blank" style="color:#004085; font-weight:bold;">https://Blooket1-V1.github.io</a>!`;
 
                                     const closeBtn = document.createElement("button");
-                                    closeBtn.innerText = "✖";
+                                    closeBtn.innerText = "âœ–";
                                     closeBtn.style.marginLeft = "10px";
                                     closeBtn.style.background = "none";
                                     closeBtn.style.border = "none";
@@ -978,6 +978,7 @@
                         zoneViewer.appendChild(zoneFrame);
                     }
                     zoneFrame.contentDocument.open();
+                    zoneFrame.sandbox = "allow-pointer-lock allow-scripts";
                     zoneFrame.contentDocument.write(html);
                     zoneFrame.contentDocument.close();
                     document.getElementById('zoneName').textContent = file.name;
