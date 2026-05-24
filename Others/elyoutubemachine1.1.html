@@ -74,6 +74,7 @@ button:hover {
 <div class="container">
 
     <h1>Video Player</h1>
+    <p>enter youtube url below</p>
 
     <div class="controls">
         <input
@@ -98,17 +99,44 @@ button:hover {
         ></iframe>
     </div>
     
-  <h2>Save urls</h2>
+  <h2>Save your youtube URLs</h2>
 
   <input id="todoInput" placeholder="Enter a URL" />
   <button onclick="addTodo()">Add</button>
 
   <ul id="list"></ul>
+  <h2>use this to find your video</h2>
+  <input id="giggle" placeholder="Enter a search query">
+  <button onclick="googles()">Search google</button>
 
 
 </div>
 
 <script>
+function googles()   {
+const inputss = document.getElementById("giggle");
+ const tabsss = window.open("about:blank", "_blank");
+
+    const html =
+'<!DOCTYPE html>' +
+'<html>' +
+'<head>' +
+'<title>Untitled</title>' +
+'<style>' +
+'html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#fff;font-family:sans-serif;}' +
+'iframe{border:none;width:100%;height:100%;}' +
+'</style>' +
+'</head>' +
+'<body>' +
+'<iframe src="https://www.google.com/search?q=' + encodeURIComponent(inputss.value) + '&igu=1"></iframe>' +
+'</body>' +
+'</html>';
+
+
+    tabsss.document.write(html);
+    tabsss.document.close();
+
+}
  let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
     renderTodos();
