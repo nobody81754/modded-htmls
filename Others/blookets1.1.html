@@ -25,6 +25,25 @@
     <meta name="twitter:title" content="Blooket1-V1">
     <meta name="twitter:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on Blooket1-V1. Fast, free, no downloadsâ€”perfect for school or home.">
     <style>
+    #introScreen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #introVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #mainContent {
+      display: none;
+    }
         :root {
             --primary: #e8ebff;
             --primary-hover: #e8ebff;
@@ -656,6 +675,14 @@
 </head>
 
 <body class="dark-mode">
+
+<div id="introScreen">
+    <video id="introVideo" autoplay muted playsinline>
+        <source src="https://cdn.jsdelivr.net/gh/nobody81754/funnyhaha/rickroll2.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div id="mainContent" style="display:none;">
     <header>
 
 <div class="header-content">
@@ -1392,6 +1419,24 @@
 
       
     </script>
+    </div>
+
+</div>
+
+<script>
+window.addEventListener("load", () => {
+    const intro = document.getElementById("introScreen");
+    const main = document.getElementById("mainContent");
+    const video = document.getElementById("introVideo");
+
+    video.play().catch(() => {});
+
+    setTimeout(() => {
+        intro.remove();
+        main.style.display = "block";
+    }, 10000);
+});
+</script>
 </body>
 
 </html>
