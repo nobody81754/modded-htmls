@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>tung</title>
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+.video-container {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: black;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.video-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #ff0000;
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #cc0000;
+}
+
+.error {
+    color: #ff6666;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Video Player</h1>
+    <p>enter youtube url below</p>
+
+    <div class="controls">
+        <input
+            id="videoInput"
+            placeholder="Enter YouTube Video ID"
+        >
+
+        <button onclick="loadVideo()">
+            Play
+        </button>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    
+    
+  <h2>Save your youtube URLs</h2>
+
+  <input id="todoInput" placeholder="Enter a URL" />
+  <button onclick="addTodo()">Add</button>
+
+  <ul id="list"></ul>
+  <h2>use this to find your video</h2>
+  <input id="giggle" placeholder="Enter a search query">
+  <button onclick="googles()">Search google</button>
+
+
+</div>
+
+<script>
+function googles()   {
+const inputss = document.getElementById("giggle");
+ const tabsss = window.open("about:blank", "_blank");
+
+    const html =
+'<!DOCTYPE html>' +
+'<html>' +
+'<head>' +
+'<title>Untitled</title>' +
+'<style>' +
+'html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#fff;font-family:sans-serif;}' +
+'iframe{border:none;width:100%;height:100%;}' +
+'</style>' +
+'</head>' +
+'<body>' +
+'<iframe src="https://www.google.com/search?q=' + encodeURIComponent(inputss.value) + '&igu=1"></iframe>' +
+'</body>' +
+'</html>';
+
+
+    tabsss.document.write(html);
+    tabsss.document.close();
+
+}
+ let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+    renderTodos();
+
+    function addTodo() {
+      const input = document.getElementById("todoInput");
+      const text = input.value.trim();
+
+      if (!text) return;
+     
+
+      todos.push(text);
+
+      localStorage.setItem("todos", JSON.stringify(todos));
+
+      input.value = "";
+      renderTodos();
+    }
+
+    function renderTodos() {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      todos.forEach((todo, index) => {
+        const li = document.createElement("li");
+
+        li.textContent = todo;
+
+        // delete button
+        const btn = document.createElement("button");
+        btn.textContent = "X";
+        btn.style.marginLeft = "10px";
+
+        btn.onclick = () => {
+          todos.splice(index, 1);
+          localStorage.setItem("todos", JSON.stringify(todos));
+          renderTodos();
+        };
+
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+    }
+    
+    
+
+async function loadVideo() {
+
+    const errorEl =
+        document.getElementById("error");
+
+    errorEl.textContent = "";
+
+    const videoId =
+        document.getElementById("videoInput")
+        .value
+        .trim()
+        .slice(32,43);
+
+    if (!videoId) {
+        errorEl.textContent =
+            "Please enter a video Url";
+        return;
+    }
+
+    try {
+
+        
+
+        const streamUrl =
+            `https://yout-ube.com/watch?v=${videoId}`;
+
+        window.open(streamUrl, "_blank");
+
+    } catch (err) {
+
+        console.error(err);
+
+        errorEl.textContent =
+            "Failed to load video";
+    }
+}
+
+
+
+</script>
+
+</body>
+</html>
